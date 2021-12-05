@@ -3,11 +3,13 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 app.use(express.json())
+const ObjectId = require('mongodb').ObjectId;
 const { MongoClient, MongoCursorInUseError } = require('mongodb');
 require('dotenv').config()
 const port =  process.env.PORT || 5000 ;
 
-const fileUpload = require('express-fileupload')
+const fileUpload = require('express-fileupload');
+const { query } = require('express');
 
 app.use(fileUpload())
 
@@ -85,6 +87,15 @@ async function run ()
              const result = await users.toArray();
              res.json(result)
          })
+
+
+         app.get('/blog/:id', async(req, res) => {
+           const id = req.params;
+           const filter = { _id : ObjectId(id)};
+           const query = await blogsCollection.findOne(filter)
+           res.json(query)
+         })
+
 
          app.get('/blogs', async(req, res)=>{
              const blogs =  blogsCollection.find({});
