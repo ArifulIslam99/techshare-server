@@ -24,7 +24,7 @@ async function run ()
          const database = client.db('TechShare')
          const usersCollection = database.collection('users')
          const blogsCollection = database.collection('blogs')
-
+         const feedBackCollection = database.collection('feedbacks')
 
         app.post('/users', async(req, res)=>{
           const user = req.body;
@@ -32,7 +32,7 @@ async function run ()
           res.json(result)
           
         })  
-
+        
         app.get('/users/:email', async(req, res) =>{
 
           const email = req.params.email;
@@ -40,7 +40,7 @@ async function run ()
           const user = await usersCollection.findOne(query)
           res.json(user)
         })
-
+        
         app.put('/users', async(req, res)=>{
           const user = req.body;
           const filter = {email : user.email}
@@ -71,6 +71,22 @@ async function run ()
 
            const result  = await blogsCollection.insertOne(blogs)
            res.json(result)
+        }) 
+
+        app.get('/feedbacks', async(req, res) => {
+          
+            const feedbacks =  feedBackCollection.find({});
+            const result = await feedbacks.toArray()
+            res.json(result)
+
+        }) 
+
+        app.post('/feedbacks', async(req, res) => {
+            
+             const feedbacks = req.body;
+             const result = await feedBackCollection.insertOne(feedbacks)
+             res.json(result)
+
         })
 
         app.put('/users/roles' , async(req, res)=>{
