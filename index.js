@@ -58,15 +58,15 @@ async function run ()
           const author = req.body.author;
           const description = req.body.description;
           const status = req.body.status;
-
+          const authorEmail = req.body.email;
           const pic = req.files.image;
           const picData = pic.data;
           const encodedPic = picData.toString('base64')
           const image = Buffer.from(encodedPic, 'base64');
-
+          
            const blogs = {
              
-             title, description, author, status, image
+              title,authorEmail, description, author, status, image,
            }
 
            const result  = await blogsCollection.insertOne(blogs)
@@ -96,6 +96,21 @@ async function run ()
            res.json(query)
          })
 
+         app.delete('/blog/:id', async(req, res)=>{
+           const id = req.params;
+           const filter = { _id : ObjectId(id)};
+           const query = await blogsCollection.deleteOne(filter)
+           res.json(query)
+         })
+         
+
+         app.get('/blog/:email', async(req, res)=>{
+           const email = req.params;
+           const filter = { email: email}
+           const query =  blogsCollection.find(filter)
+           const result = await query.toString()
+           res.json(result)
+         })
 
          app.get('/blogs', async(req, res)=>{
              const blogs =  blogsCollection.find({});
