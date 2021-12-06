@@ -104,13 +104,17 @@ async function run ()
          })
          
 
-         app.get('/blog/:email', async(req, res)=>{
-           const email = req.params;
-           const filter = { email: email}
-           const query =  blogsCollection.find(filter)
-           const result = await query.toString()
+        app.get('/blogs/:email', async(req, res) =>{
+
+           const author = req.params;
+           
+           const filter = { authorEmail : author.email}
+           console.log(filter)
+           const query = blogsCollection.find(filter)
+           const result = await query.toArray()
            res.json(result)
-         })
+
+        })
 
          app.get('/blogs', async(req, res)=>{
              const blogs =  blogsCollection.find({});
