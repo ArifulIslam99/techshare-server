@@ -25,6 +25,7 @@ async function run ()
          const usersCollection = database.collection('users')
          const blogsCollection = database.collection('blogs')
          const feedBackCollection = database.collection('feedbacks')
+         const productCollection = database.collection('products')
 
         app.post('/users', async(req, res)=>{
           const user = req.body;
@@ -80,6 +81,37 @@ async function run ()
             res.json(result)
 
         }) 
+
+        app.get('/products', async(req, res)=>{
+         
+          const products = productCollection.find({})
+          const result = await products.toArray()
+          res.json(result)
+
+        }) 
+
+        app.post('/products', async(req, res) =>{
+          const catagory = req.body.catagory;
+          const brand = req.body.brand;
+          const model = req.body.model;
+          const price = req.body.price;
+          const specification = req.body.spec;
+          const priority = req.body.priority;
+          const pic = req.files.image;
+          const picData = pic.data;
+          const encodedPic = picData.toString('base64')
+          const image = Buffer.from(encodedPic, 'base64');
+
+          const product = {
+            catagory, brand, model, price, specification, priority,image
+          } 
+
+          console.log(product) 
+
+          const result = await productCollection.insertOne(product)
+
+          res.json(result)
+        })
 
         app.post('/feedbacks', async(req, res) => {
             
