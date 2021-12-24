@@ -32,7 +32,7 @@ async function run ()
           const result = await usersCollection.insertOne(user);
           res.json(result)
           
-        })  
+        })   
         
         app.get('/users/:email', async(req, res) =>{
 
@@ -40,19 +40,35 @@ async function run ()
           const query = {email : email}
           const user = await usersCollection.findOne(query)
           res.json(user)
-        })
+        }) 
         
         app.put('/users', async(req, res)=>{
           const user = req.body;
           const filter = {email : user.email}
           const options = { upsert : true}
-
           const updateDoc = {$set : user}
 
           const result = await usersCollection.updateOne(filter, updateDoc, options)
-
+          res.json(result)
           
         }) 
+
+        app.put('/users/:email', async(req, res)=>{
+
+          const dob = req.body.dob;
+          const email = req.body.email;
+          const options = { upsert : true}
+          const filter = {email : email}
+          const pic = req.files.image;
+          const picData = pic.data;
+          const encodedPic = picData.toString('base64')
+          const profilePhoto = Buffer.from(encodedPic, 'base64');
+          
+          const updateDoc = {$set : {dob: dob, profilePhoto: profilePhoto}}
+          const result = await usersCollection.updateOne(filter,updateDoc, options)
+       
+          res.json(result)
+        })
 
         app.post('/blogs', async(req, res )=>{
           const title = req.body.title;
