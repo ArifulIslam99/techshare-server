@@ -63,6 +63,16 @@ async function run ()
           res.json(result)
 
         })
+
+        app.delete('/recommendation/:id',  async(req, res)=>{
+
+          const id = req.params.id;
+          const filter = { _id : ObjectId(id)}
+          const result = await recommendationCollection.deleteOne(filter)
+
+          res.json(result)
+          
+        })
         
         app.put('/users', async(req, res)=>{
           const user = req.body;
@@ -80,7 +90,9 @@ async function run ()
           const result = await recommendationCollection.insertOne(recommendation)
           res.json(result)
 
-        })
+        }) 
+
+        
 
         app.put('/users/:email', async(req, res)=>{
 
