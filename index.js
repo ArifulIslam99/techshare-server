@@ -135,6 +135,14 @@ async function run ()
 
         }) 
 
+        app.get('/product/:id', async(req, res) =>{
+          const id = req.params;
+          const filter = {_id : ObjectId(id)}
+          const result = await productCollection.findOne(filter)
+
+          res.json(result)
+        })
+
         app.post('/products', async(req, res) =>{
           const catagory = req.body.catagory;
           const brand = req.body.brand;
