@@ -26,8 +26,10 @@ async function run ()
          const blogsCollection = database.collection('blogs')
          const feedBackCollection = database.collection('feedbacks')
          const productCollection = database.collection('products')
-
-        app.post('/users', async(req, res)=>{
+         const recommendationCollection = database.collection('recommendations')
+         
+         
+         app.post('/users', async(req, res)=>{
           const user = req.body;
           const result = await usersCollection.insertOne(user);
           res.json(result)
@@ -40,18 +42,34 @@ async function run ()
           const query = {email : email}
           const user = await usersCollection.findOne(query)
           res.json(user)
-        }) 
+        })  
+
+        app.get('/recommendations', async(req, res) => {
+           
+           const recommendation =  recommendationCollection.find({})
+
+           const result = await recommendation.toArray()
+
+           res.json(result)
+        })
         
         app.put('/users', async(req, res)=>{
           const user = req.body;
           const filter = {email : user.email}
           const options = { upsert : true}
           const updateDoc = {$set : user}
-
           const result = await usersCollection.updateOne(filter, updateDoc, options)
           res.json(result)
           
-        }) 
+        })  
+
+        app.post('/recommendations' , async(req, res) => {
+          
+          const recommendation= req.body;
+          const result = await recommendationCollection.insertOne(recommendation)
+          res.json(result)
+
+        })
 
         app.put('/users/:email', async(req, res)=>{
 
