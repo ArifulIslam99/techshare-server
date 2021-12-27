@@ -51,6 +51,17 @@ async function run ()
            const result = await recommendation.toArray()
 
            res.json(result)
+        }) 
+
+        app.get('/recommendations/:email', async(req, res) => {
+              
+          const email = req.params;
+          const filter = {email: email.email};
+          const query =  recommendationCollection.find(filter)
+          const result = await query.toArray()
+          
+          res.json(result)
+
         })
         
         app.put('/users', async(req, res)=>{
