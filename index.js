@@ -92,6 +92,36 @@ async function run ()
 
         }) 
 
+        app.get('/products/laptops', async(req, res)=>{
+
+              const filter = { catagory: 'Laptop'};
+              const query =  productCollection.find(filter)
+              const result = await query.toArray()
+
+              res.json(result)
+
+        })
+
+        app.get('/products/smartphones', async(req, res)=>{
+
+          const filter = { catagory: 'SmartPhone'};
+          const query =  productCollection.find(filter)
+          const result = await query.toArray()
+
+          res.json(result)
+
+         })
+
+         app.get('/products/smartwatches', async(req, res)=>{
+
+          const filter = { catagory: 'SmartWatch'};
+          const query =  productCollection.find(filter)
+          const result = await query.toArray()
+
+          res.json(result)
+
+    })
+
         
 
         app.put('/users/:email', async(req, res)=>{
