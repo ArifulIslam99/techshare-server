@@ -90,7 +90,23 @@ async function run ()
           const result = await recommendationCollection.insertOne(recommendation)
           res.json(result)
 
-        }) 
+        })  
+
+
+        app.get('/product/:id', async(req, res)=>{
+          const id = req.params;
+          const filter = {_id: ObjectId(id)}
+
+          const result = await productCollection.findOne(filter)
+          res.json(result)
+        })
+
+        app.delete('/product/:id', async(req, res)=>{
+          const id = req.params;
+          const filter = {_id: ObjectId(id)}
+          const result = await productCollection.deleteOne(filter)
+          res.json(result)
+        })
 
         app.get('/products/laptops', async(req, res)=>{
 
@@ -237,6 +253,14 @@ async function run ()
            const filter = { _id : ObjectId(id)};
            const query = await blogsCollection.findOne(filter)
            res.json(query)
+         })
+
+         app.put('/blog/:id', async(req, res) =>{
+           const id = req.params;
+           const filter = { _id : ObjectId(id)};
+           const updateDoc = { $set : {status: 'active'} }
+           const result = await blogsCollection.updateOne(filter, updateDoc)
+           res.json(result)
          })
 
          app.delete('/blog/:id', async(req, res)=>{
